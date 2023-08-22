@@ -17,6 +17,23 @@
         android:id="@+id/txtviewRegistrar"/>
 
     <EditText
+        android:id="@+id/txtNomeCompleto"
+        android:hint="Nome completo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="10dp" />
+    <EditText
+        android:id="@+id/txtEmail"
+        android:hint="Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="10dp" />
+
+    <EditText
         android:id="@+id/txtNovoUsuario"
         android:hint="Username"
         android:layout_width="match_parent"

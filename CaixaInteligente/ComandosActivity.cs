@@ -8,6 +8,7 @@ using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Client;
 using Android.Content;
 using Android.Preferences;
+using System.Text;
 
 namespace CaixaInteligente
 {
@@ -95,6 +96,13 @@ namespace CaixaInteligente
             var topic = "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_REMOVER_HORARIO";
             var payload = mensagem;
 
+            StringBuilder stringBuilder = new StringBuilder(payload);
+            stringBuilder.Remove(2, 1);
+            payload = stringBuilder.ToString();
+            payload = 'R' + payload;
+
+
+
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithPayload(payload)
@@ -122,6 +130,11 @@ namespace CaixaInteligente
         {
             var topic = "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ADICIONAR_HORARIO";
             var payload = mensagem;
+
+            StringBuilder stringBuilder = new StringBuilder(payload);
+            stringBuilder.Remove(2, 1);
+            payload = stringBuilder.ToString();
+            payload = 'H' + payload;
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)

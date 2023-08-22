@@ -19,6 +19,8 @@ namespace CaixaInteligente
     {
         EditText txtNovoUsuario;
         EditText txtSenhaNovoUsuario;
+        EditText txtNomeCompleto;
+        EditText txtEmail;
         Android.Widget.Button btnCriarNovoUsuario;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -27,6 +29,8 @@ namespace CaixaInteligente
             SetContentView(Resource.Layout.NovoUsuario);
             txtNovoUsuario = FindViewById<EditText>(Resource.Id.txtNovoUsuario); 
             txtSenhaNovoUsuario = FindViewById<EditText>(Resource.Id.txtSenhaNovoUsuario);
+            txtNomeCompleto = FindViewById<EditText>(Resource.Id.txtNomeCompleto);
+            txtEmail = FindViewById<EditText>(Resource.Id.txtEmail);
             btnCriarNovoUsuario = FindViewById<Android.Widget.Button>(Resource.Id.btnRegistrar);
 
             btnCriarNovoUsuario.Click += BtnCriarNovoUsuario_Click;
@@ -35,8 +39,8 @@ namespace CaixaInteligente
         {
             try
             {
-                if (txtNovoUsuario.Text != "" && txtSenhaNovoUsuario.Text != "")
-                    RegisterAsync(txtNovoUsuario.Text, txtSenhaNovoUsuario.Text);
+                if (txtNovoUsuario.Text != "" && txtSenhaNovoUsuario.Text != "" && txtNomeCompleto.Text != "" && txtEmail.Text != "")
+                    RegisterAsync(txtNovoUsuario.Text, txtSenhaNovoUsuario.Text, txtNomeCompleto.Text, txtEmail.Text);
                 else
                 {
                     string titulo = "Erro";
@@ -67,10 +71,10 @@ namespace CaixaInteligente
             }
             
         }
-        private async Task RegisterAsync(string nome, string senha)
+        private async Task RegisterAsync(string nome, string senha, string nomeCompleto, string email)
         {
             var userService = new UserService();
-            bool result = await userService.RegisterUser(nome, senha);
+            bool result = await userService.RegisterUser(nome, senha, nomeCompleto, email);
             if (result)
             {
                 string titulo = "Sucesso";

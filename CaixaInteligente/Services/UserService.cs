@@ -7,6 +7,8 @@ using Android.Widget;
 using CaixaInteligente.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Java.Util;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,17 +30,21 @@ namespace CaixaInteligente.Services
                 .Where(u => u.Object.Username == name)
                 .FirstOrDefault();
             return (user != null);
-       }
-        public async Task<bool> RegisterUser(string name, string password)
+        }
+        public async Task<bool> RegisterUser(string name, string password, string nomeCompleto, string email)
         {
-            if(await IsUserExists(name) == false)
+            if (await IsUserExists(name) == false)
             {
                 await client.Child("Users")
                     .PostAsync(new User()
-                {
-                    Username = name,
-                    Password = password
-                });
+                    {
+                        Username = name,
+                        Password = password,
+                        NomeCompleto = nomeCompleto,
+                        Email = email,
+                        DataHoraCadastro = DateTime.Now,
+                        Id = UUID.RandomUUID().ToString() + name
+                    });
                 return true;
             }
             else
@@ -46,14 +52,19 @@ namespace CaixaInteligente.Services
                 return false;
             }
         }
-        public async Task<bool>LoginUser(string name, string password)
+        public async Task<bool> LoginUser(string name, string password)
         {
             var user = (await client.Child("Users").OnceAsync<User>())
                 .Where(u => u.Object.Username == name)
                 .Where(u => u.Object.Password == password)
                 .FirstOrDefault();
-
+            if (user != null)
+            {
+                UsuarioHelpers.ApagarUsuario();
+                UsuarioHelpers.SalvarUsuario(user.Object);
+            }
             return (user != null);
         }
+        
     }
-} 
+}

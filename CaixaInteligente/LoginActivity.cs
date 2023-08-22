@@ -84,14 +84,13 @@ namespace CaixaInteligente
             listaRemedios = db.Table<Remedio>().ToList();
             remedioAdapter = new RemedioAdapter(this, listaRemedios);
             listViewRemedios.Adapter = remedioAdapter;
-
-           
         }
 
 
         private void BtnPerfil_Click(object sender, System.EventArgs e)
         {
-            // Implementar ação do botão perfil
+            Intent intent = new Intent(this, typeof(PerfilActivity));
+            StartActivity(intent);
         }
 
         private void BtnComandos_Click(object sender, System.EventArgs e)

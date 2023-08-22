@@ -5,7 +5,9 @@ using Android.Runtime;
 using Android.Widget;
 using AndroidX.AppCompat.App;
 using CaixaInteligente.Services;
+using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -18,6 +20,7 @@ namespace CaixaInteligente
         EditText txtSenha;
         Android.Widget.Button btnCriar;
         Android.Widget.Button btnLogin;
+        private SQLiteConnection db;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -31,6 +34,13 @@ namespace CaixaInteligente
             btnCriar = FindViewById <Android.Widget.Button>(Resource.Id.btnRegistrar);
             txtUsuario = FindViewById<EditText>(Resource.Id.txtUsuario);
             txtSenha = FindViewById<EditText>(Resource.Id.txtSenha);
+
+            // Cria o banco de dados e a tabela
+            string caminhoDB = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string nomeDB = "Usuario.db";
+            string caminhoCompletoDB = System.IO.Path.Combine(caminhoDB, nomeDB);
+            db = new SQLiteConnection(caminhoCompletoDB);
+            db.CreateTable<Usuario>();
 
             btnLogin.Click += BtnLogin_ClickAsync;
             btnCriar.Click += BtnCriar_Click;

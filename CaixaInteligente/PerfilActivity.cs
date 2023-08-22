@@ -11,7 +11,28 @@ using System.Text;
 
 namespace CaixaInteligente
 {
-    internal class PerfilActivity:Activity
+    [Activity(Label = "Perfil do Usuário", Theme = "@style/AppTheme")]
+    public class PerfilActivity:Activity
     {
+        private TextView usernameTextView, emailTextView, nomeCompletoTextView;
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.PerfilUsuario);
+
+            usernameTextView = FindViewById<TextView>(Resource.Id.usernameTextView);
+            emailTextView = FindViewById<TextView>(Resource.Id.emailTextView);
+            nomeCompletoTextView = FindViewById<TextView>(Resource.Id.nomeCompletoTextView);
+
+            Usuario usuario = UsuarioHelpers.ObterUsuarioLogado();
+
+            string username = usuario.Username;
+            string email = usuario.Email;
+            string nomeCompleto = usuario.NomeCompleto;
+
+            usernameTextView.Text = username;
+            emailTextView.Text = email;
+            nomeCompletoTextView.Text = nomeCompleto;
+        }
     }
 }
