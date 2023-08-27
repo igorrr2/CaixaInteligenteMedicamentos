@@ -21,10 +21,30 @@
         android:hint="Nome do Remédio"/>
 
     <EditText
-        android:id="@+id/edit_text_horario"
+        android:id="@+id/edit_text_descricao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Horário do Remédio"/>
+        android:hint="Descrição"/>
+
+    <EditText
+        android:id="@+id/edit_text_horarioInicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Horário de início para tomar o remédio"/>
+
+    <EditText
+        android:id="@+id/edit_text_frequencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Frequência"/>
+
+    <EditText
+        android:id="@+id/edit_Recipiente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Recipiente"/>
 
     <Button
         android:id="@+id/button_salvar"

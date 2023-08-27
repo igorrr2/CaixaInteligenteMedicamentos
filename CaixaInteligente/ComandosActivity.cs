@@ -9,6 +9,7 @@ using MQTTnet.Client;
 using Android.Content;
 using Android.Preferences;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CaixaInteligente
 {
@@ -43,7 +44,6 @@ namespace CaixaInteligente
             mqttClient2.ConnectAsync(mqttConfig).Wait();
 
             btnDispararAlarme.Click += OnAlarmButtonClicked;
-
 
             // Configurações do cliente MQTT
 
@@ -91,6 +91,7 @@ namespace CaixaInteligente
 
             mqttClient2.PublishAsync(message).Wait();
         }
+
         public void RemoverRemedioEsp(string mensagem)
         {
             var topic = "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_REMOVER_HORARIO";
@@ -142,7 +143,7 @@ namespace CaixaInteligente
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .WithRetainFlag(false)
                 .Build();
-            if(mqttClient2 == null)
+            if (mqttClient2 == null)
             {
                 var brokerHost = "test.mosquitto.org";
                 var brokerPort = 1883;

@@ -64,6 +64,7 @@ namespace CaixaInteligente.Services
                 UsuarioHelpers.SalvarUsuario(user.Object);
             }
             return (user != null);
+            
         }
         
     }

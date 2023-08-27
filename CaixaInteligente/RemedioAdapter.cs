@@ -5,12 +5,15 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using CaixaInteligente.Models;
+using CaixaInteligente.Services;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Protocol;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -37,15 +40,19 @@ namespace CaixaInteligente
                 new AlertDialog.Builder(context)
                     .SetTitle("Apagar Remédio")
                     .SetMessage("Tem certeza que deseja apagar este remédio?")
-                    .SetPositiveButton("Sim", (dialog, args) =>
+                    .SetPositiveButton("Sim", async (dialog, args) =>
                     {
+
+                        var remediosService = new RemedioService();
+                        bool removido = await remediosService.RemoverRemedio(remedio.NomeRemedio, remedio.IdUsuario);
+
                         remedios.RemoveAt(position);
                         string caminhoBanco = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Remedio.db");
                         var db = new SQLiteConnection(caminhoBanco);
                         db.Delete<Remedio>(remedio.Id);
-                        //Notifica o esp sobrer o remédio apagado e envia o horário para remoção
-                        _removerRemedioEsp = new ComandosActivity();
-                        _removerRemedioEsp.RemoverRemedioEsp(remedio.Horario);
+                        //Notifica o esp sobre o remédio apagado e envia o horário para remoção
+                        //_removerRemedioEsp = new ComandosActivity();
+                        //_removerRemedioEsp.RemoverRemedioEsp(remedio.Horario);
                         NotifyDataSetChanged();
                         Toast.MakeText(context, "Remédio apagado", ToastLength.Short).Show();
                     })
@@ -85,9 +92,13 @@ namespace CaixaInteligente
             Remedio remedio = remedios[position];
             TextView textViewNome = view.FindViewById<TextView>(Resource.Id.text_view_nome);
             TextView textViewHorario = view.FindViewById<TextView>(Resource.Id.text_view_horario);
+            TextView textFrequencia = view.FindViewById<TextView>(Resource.Id.text_frequencia);
+            TextView textRecipiente = view.FindViewById<TextView>(Resource.Id.text_recipiente);
             Button buttonApagar = view.FindViewById<Button>(Resource.Id.button_apagar);
-            textViewNome.Text = remedio.Nome;
-            textViewHorario.Text = remedio.Horario;
+            textViewNome.Text = remedio.NomeRemedio;
+            textViewHorario.Text = "Horário de início: " + remedio.HorarioInicio;
+            textFrequencia.Text = "Frequência: " + remedio.Frequencia + "h";
+            textRecipiente.Text = "Recipiente: " + remedio.Recipiente;
 
             // Remove o manipulador de clique atual do botão "Apagar" antes de adicionar o novo manipulador
             buttonApagar.Click -= apagarClickHandler;
@@ -99,6 +110,12 @@ namespace CaixaInteligente
             buttonApagar.Tag = position;
 
             return view;
+        }
+        public static void RemoverTodosRemediosSqlite()
+        {
+            string caminhoBanco = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Remedio.db");
+            var db = new SQLiteConnection(caminhoBanco);
+            db.Execute("DELETE FROM Remedio");
         }
     }
 }

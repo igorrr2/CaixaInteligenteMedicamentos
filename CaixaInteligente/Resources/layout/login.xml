@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
     <!-- Botão Perfil -->
     <Button
         android:id="@+id/button_profile"
@@ -14,6 +22,18 @@
         android:layout_alignParentStart="true"
         android:textColor="#FFFFFF"
         android:background="@color/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/button_SincronizarRemedios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_sync_blue"
+        android:contentDescription="Ícone de Sincronização"
+        android:layout_margin="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="sincronizarRemedios"
+        android:layout_centerHorizontal="true" />
+
 
     <!-- Botão Comandos -->
     <Button

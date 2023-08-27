@@ -8,17 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SQLite;
 
-namespace CaixaInteligente
+namespace CaixaInteligente.Models
 {
-    public class Remedio
+    internal class Remedios
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
         public string IdUsuario { get; set; }
 
-        public string NomeRemedio { get; set; }
+        public string NomeRemedio { get; set; } 
 
         public string Descricao { get; set; }
 
@@ -26,14 +23,9 @@ namespace CaixaInteligente
 
         public string HorarioInicio { get; set; }
 
-        public int Frequencia { get; set; }
+        public int Frequencia { get; set; } 
 
         public int Recipiente { get; set; }
-
-        public static implicit operator Java.Lang.Object(Remedio v)
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }
