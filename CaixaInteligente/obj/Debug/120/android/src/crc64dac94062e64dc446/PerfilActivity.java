@@ -18,8 +18,9 @@ public class PerfilActivity
 	public PerfilActivity ()
 	{
 		super ();
-		if (getClass () == PerfilActivity.class)
+		if (getClass () == PerfilActivity.class) {
 			mono.android.TypeManager.Activate ("CaixaInteligente.PerfilActivity, CaixaInteligente", "", this, new java.lang.Object[] {  });
+		}
 	}
 
 	private java.util.ArrayList refList;

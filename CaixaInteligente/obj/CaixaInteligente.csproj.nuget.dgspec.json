@@ -1,46 +1,54 @@
 {
   "format": 1,
   "restore": {
-    "C:\\igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj": {}
+    "C:\\Igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj": {}
   },
   "projects": {
-    "C:\\igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj": {
+    "C:\\Igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj",
+        "projectUniqueName": "C:\\Igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj",
         "projectName": "CaixaInteligente",
-        "projectPath": "C:\\igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj",
+        "projectPath": "C:\\Igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\CaixaInteligente.csproj",
         "packagesPath": "C:\\Users\\igorr\\.nuget\\packages\\",
-        "outputPath": "C:\\igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\obj\\",
+        "outputPath": "C:\\Igor\\IOT2\\CaixaInteligente\\CaixaInteligente\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\igorr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "monoandroid12.0"
+          "monoandroid13.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "monoandroid12.0": {
+          "monoandroid13.0": {
             "projectReferences": {}
           }
         }
       },
       "frameworks": {
-        "monoandroid12.0": {
+        "monoandroid13.0": {
           "dependencies": {
+            "FirebaseDatabase.net": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "MQTTnet": {
               "target": "Package",
-              "version": "[4.2.0.706, )"
+              "version": "[4.2.1.781, )"
             },
             "MQTTnet.Extensions.ManagedClient": {
               "target": "Package",
-              "version": "[4.2.0.706, )"
+              "version": "[4.2.1.781, )"
             },
             "Xamarin.Android.Support.Design": {
               "target": "Package",
