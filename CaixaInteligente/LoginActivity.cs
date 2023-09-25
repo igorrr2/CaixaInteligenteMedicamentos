@@ -19,6 +19,7 @@ using MQTTnet;
 using CaixaInteligente.Services;
 using System.Threading.Tasks;
 using CaixaInteligente.Models;
+using Android.Preferences;
 
 namespace CaixaInteligente
 {
@@ -30,6 +31,7 @@ namespace CaixaInteligente
         private RemedioAdapter remedioAdapter;
         private SQLiteConnection db;
         ProgressBar progressBar;
+        private bool AbrindoTelaPrimeiraVez = true;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -86,9 +88,23 @@ namespace CaixaInteligente
         protected override void OnResume()
         {
             base.OnResume();
-            CarregarRemedios();
-        }
+            ISharedPreferences sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
+            bool adicionarRemedioTela = sharedPreferences.GetBoolean("AdicinoarRemedioTela", false); // O segundo argumento é um valor padrão caso a chave não exista
 
+            if (adicionarRemedioTela)
+            {
+                SincronizarRemediosAsync();
+                
+            }
+            else if(!AbrindoTelaPrimeiraVez)
+            {
+                CarregarRemediosSincrono();
+            }
+            ISharedPreferencesEditor editor = sharedPreferences.Edit();
+            editor.PutBoolean("AdicinoarRemedioTela", false);
+            editor.Apply();
+            AbrindoTelaPrimeiraVez = false;
+        }
 
         private void BtnPerfil_Click(object sender, System.EventArgs e)
         {
@@ -117,6 +133,10 @@ namespace CaixaInteligente
         {
             try
             {
+                ISharedPreferences sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = sharedPreferences.Edit();
+                editor.PutBoolean("AdicinoarRemedioTela", true);
+                editor.Apply();
                 Intent intent = new Intent(this, typeof(AdicionarRemedioActivity));
                 StartActivity(intent);
             }
@@ -169,10 +189,15 @@ namespace CaixaInteligente
             RemedioAdapter.RemoverTodosRemediosSqlite();
             await CarregarRemediosBancoFirebaseAsync();
             CarregarRemedios();
-            await Task.Delay(1000);
             progressDialog.Dismiss();
 
 
+        }
+        private async Task CarregarRemediosSincrono()
+        {
+            RemedioAdapter.RemoverTodosRemediosSqlite();
+            await CarregarRemediosBancoFirebaseAsync();
+            CarregarRemedios();
         }
     }
 

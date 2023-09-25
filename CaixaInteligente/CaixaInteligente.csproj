@@ -90,7 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdicionarRemedioActivity.cs" />
+    <Compile Include="AlterarSenhaActivity.cs" />
     <Compile Include="ComandosActivity.cs" />
+    <Compile Include="EditarRemedioActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Remedios.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RemedioService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="UserProfileEditActivity.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="UsuarioHelpers.cs" />
   </ItemGroup>
@@ -240,6 +243,23 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_sync_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\EditarRemedio.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\PerfilUsuarioEdicao.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\AlterarSenha.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

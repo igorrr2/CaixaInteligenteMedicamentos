@@ -23,7 +23,9 @@ internal static class UsuarioHelpers
         string caminhoCompletoDB = System.IO.Path.Combine(caminhoDB, nomeDB);
         SQLiteConnection db;
         db = new SQLiteConnection(caminhoCompletoDB);
-        db.DeleteAll<Usuario>();
+        db.Execute("DELETE FROM Usuario");
+        db.Execute("DROP TABLE IF EXISTS Usuario");
+        db.CreateTable<Usuario>();
     }
     public static Usuario ObterUsuarioLogado()
     {
@@ -35,5 +37,25 @@ internal static class UsuarioHelpers
         List<Usuario> usuario = db.Table<Usuario>().ToList();
         return usuario[0];
 
+    }
+    public static void AtualizarUsuario(string idUsuario, string username, string email, string nomeCompleto)
+    {
+        string caminhoDB = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+        string nomeDB = "Usuario.db";
+        string caminhoCompletoDB = System.IO.Path.Combine(caminhoDB, nomeDB);
+        SQLiteConnection db;
+        db = new SQLiteConnection(caminhoCompletoDB);
+
+        var usuarioToUpdate = db.Table<Usuario>().FirstOrDefault(u => u.Id == idUsuario);
+        if (usuarioToUpdate != null)
+        {
+            // Modificar os dados do usuário conforme necessário
+            usuarioToUpdate.Username = username;
+            usuarioToUpdate.Email = email;
+            usuarioToUpdate.NomeCompleto = nomeCompleto;
+
+            // Executar o comando de atualização
+            db.Update(usuarioToUpdate);
+        }
     }
 }

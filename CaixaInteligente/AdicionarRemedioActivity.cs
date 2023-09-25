@@ -40,65 +40,69 @@ namespace CaixaInteligente
 
             buttonSalvar.Click += ButtonSalvar_Click;
         }
+        protected override void OnPause()
+        {
+            base.OnPause();
+        }
 
         private void ButtonSalvar_Click(object sender, System.EventArgs e)
         {
-            //string horario = editTextHorario.Text.ToString();
+            string horario = editTextHorarioInicio.Text.ToString();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //if (editTextNome.Text == "" || editTextHorario.Text == "")
-            //{
-            //    builder.SetTitle("Preencha todos os dados");
-            //    builder.SetMessage("Foram encontrados dados sem ser preenchidos, por favor, preencha tudo corretamente e tente novamente");
-            //    builder.SetNegativeButton("OK", (dialog, which) =>
-            //    {
-            //        ((AlertDialog)dialog).Dismiss();
-            //    });
-            //    builder.Show();
-            //}
-            //else if (editTextHorario.Text.Length != 5 || editTextHorario.Text.Length >= 3 && horario[2] != ':')
-            //{
-            //    builder.SetTitle("Formato de hora incompatível");
-            //    builder.SetMessage("Formato de hora incompatível, por favor, coloque no formato 00:00");
-            //    builder.SetNegativeButton("OK", (dialog, which) =>
-            //    {
-            //        ((AlertDialog)dialog).Dismiss();
-            //    });
-            //    builder.Show();
-            //}
-            //else if (horario[0] != '0' && horario[0] != '1' && horario[0] != '2')
-            //{
-            //    builder.SetTitle("Hora incompatível");
-            //    builder.SetMessage("Favor inserir uma hora compatível");
-            //    builder.SetNegativeButton("OK", (dialog, which) =>
-            //    {
-            //        ((AlertDialog)dialog).Dismiss();
-            //    });
-            //    builder.Show();
+            if (editTextNome.Text == "" || editTextHorarioInicio.Text == "" || editTextFrequencia.Text == "" || editTextRecipiente.Text == "")
+            {
+                builder.SetTitle("Preencha todos os dados");
+                builder.SetMessage("Foram encontrados dados sem ser preenchidos, por favor, preencha tudo corretamente e tente novamente");
+                builder.SetNegativeButton("OK", (dialog, which) =>
+                {
+                    ((AlertDialog)dialog).Dismiss();
+                });
+                builder.Show();
+            }
+            else if (editTextHorarioInicio.Text.Length != 5 || editTextHorarioInicio.Text.Length >= 3 && horario[2] != ':')
+            {
+                builder.SetTitle("Formato de hora incompatível");
+                builder.SetMessage("Formato de hora incompatível, por favor, coloque no formato 00:00");
+                builder.SetNegativeButton("OK", (dialog, which) =>
+                {
+                    ((AlertDialog)dialog).Dismiss();
+                });
+                builder.Show();
+            }
+            else if (horario[0] != '0' && horario[0] != '1' && horario[0] != '2')
+            {
+                builder.SetTitle("Hora incompatível");
+                builder.SetMessage("Favor inserir uma hora compatível");
+                builder.SetNegativeButton("OK", (dialog, which) =>
+                {
+                    ((AlertDialog)dialog).Dismiss();
+                });
+                builder.Show();
 
-            //}
-            //else if (horario[0] == '2' && (horario[1] == '4' || horario[1] == '5' || horario[1] == '6' || horario[1] == '7' || horario[1] == '8' || horario[1] == '9'))
-            //{
-            //    builder.SetTitle("Hora incompatível");
-            //    builder.SetMessage("Favor inserir uma hora compatível");
-            //    builder.SetNegativeButton("OK", (dialog, which) =>
-            //    {
-            //        ((AlertDialog)dialog).Dismiss();
-            //    });
-            //    builder.Show();
+            }
+            else if (horario[0] == '2' && (horario[1] == '4' || horario[1] == '5' || horario[1] == '6' || horario[1] == '7' || horario[1] == '8' || horario[1] == '9'))
+            {
+                builder.SetTitle("Hora incompatível");
+                builder.SetMessage("Favor inserir uma hora compatível");
+                builder.SetNegativeButton("OK", (dialog, which) =>
+                {
+                    ((AlertDialog)dialog).Dismiss();
+                });
+                builder.Show();
 
-            //}
-            //else if (horario[3] != '0' && horario[3] != '1' && horario[3] != '2' && horario[3] != '3' && horario[3] != '4' && horario[3] != '5')
-            //{
-            //    builder.SetTitle("Hora incompatível");
-            //    builder.SetMessage("Favor inserir uma hora compatível");
-            //    builder.SetNegativeButton("OK", (dialog, which) =>
-            //    {
-            //        ((AlertDialog)dialog).Dismiss();
-            //    });
-            //    builder.Show();
+            }
+            else if (horario[3] != '0' && horario[3] != '1' && horario[3] != '2' && horario[3] != '3' && horario[3] != '4' && horario[3] != '5')
+            {
+                builder.SetTitle("Hora incompatível");
+                builder.SetMessage("Favor inserir uma hora compatível");
+                builder.SetNegativeButton("OK", (dialog, which) =>
+                {
+                    ((AlertDialog)dialog).Dismiss();
+                });
+                builder.Show();
 
-            //}
-            //else
+            }
+            else
             {
                 builder.SetTitle("Confirmação");
                 builder.SetMessage("Deseja realmente salvar o remédio?");

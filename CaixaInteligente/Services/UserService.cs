@@ -43,8 +43,10 @@ namespace CaixaInteligente.Services
                         NomeCompleto = nomeCompleto,
                         Email = email,
                         DataHoraCadastro = DateTime.Now,
-                        Id = UUID.RandomUUID().ToString() + name
-                    });
+                        Id = UUID.RandomUUID().ToString() + name,
+                        IsAdministrador = false,
+                        ChaveEsp32 = ""
+                    }) ;
                 return true;
             }
             else
@@ -66,6 +68,35 @@ namespace CaixaInteligente.Services
             return (user != null);
             
         }
-        
+        public async Task<bool> UpdateUsuario(string idUsuario, string username, string email, string nomeCompleto)
+        {
+           
+            var usuariosQuery = await client.Child("Users")
+                                            .OnceAsync<Usuario>();
+
+            try
+            {
+                foreach (var usuarioSnapshot in usuariosQuery)
+                {
+                    var usuario = usuarioSnapshot.Object;
+
+                    if (usuario.Id == idUsuario)
+                    {
+                        usuario.Username = username;
+                        usuario.Email = email;
+                        usuario.NomeCompleto = nomeCompleto;
+
+                        await client.Child("Users").Child(usuarioSnapshot.Key).PutAsync(usuario);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
     }
 }

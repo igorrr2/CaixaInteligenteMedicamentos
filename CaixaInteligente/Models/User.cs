@@ -19,6 +19,8 @@ namespace CaixaInteligente.Models
         public string NomeCompleto { get; set; }
         public DateTime DataHoraCadastro { get; set; }
         public string Id { get; set; }
+        public bool IsAdministrador { get; set; }   
+        public string ChaveEsp32 { get; set; }  
 
     }
 }

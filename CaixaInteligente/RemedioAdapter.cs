@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using static Android.Icu.Text.Transliterator;
 
 
 namespace CaixaInteligente
@@ -25,6 +26,7 @@ namespace CaixaInteligente
         private List<Remedio> remedios;
         private Context context;
         private EventHandler apagarClickHandler;
+        private EventHandler EditarClickHandler;
         ComandosActivity _removerRemedioEsp;
         public RemedioAdapter(Context context, List<Remedio> remedios)
         {
@@ -63,7 +65,19 @@ namespace CaixaInteligente
                     .Create()
                     .Show();
             };
+            EditarClickHandler = (sender, args) =>
+            {
+                var button = (Button)sender;
+                int position = (int)button.Tag;
+                Remedio remedio = remedios[position];
+                int idRemedio = remedio.Id;
+
+                Intent intent = new Intent(context, typeof(EditarRemedioActivity));
+                intent.PutExtra("idRemedio", idRemedio);
+                context.StartActivity(intent);
+            };
         }
+
 
         public override int Count
         {
@@ -95,6 +109,7 @@ namespace CaixaInteligente
             TextView textFrequencia = view.FindViewById<TextView>(Resource.Id.text_frequencia);
             TextView textRecipiente = view.FindViewById<TextView>(Resource.Id.text_recipiente);
             Button buttonApagar = view.FindViewById<Button>(Resource.Id.button_apagar);
+            Button buttonEditar = view.FindViewById<Button>(Resource.Id.button_editar);
             textViewNome.Text = remedio.NomeRemedio;
             textViewHorario.Text = "Horário de início: " + remedio.HorarioInicio;
             textFrequencia.Text = "Frequência: " + remedio.Frequencia + "h";
@@ -106,9 +121,15 @@ namespace CaixaInteligente
             // Adiciona o manipulador de clique do botão "Apagar" com a variável de evento global
             buttonApagar.Click += apagarClickHandler;
 
+            // Remove o manipulador de clique atual do botão "Apagar" antes de adicionar o novo manipulador
+            buttonEditar.Click -= EditarClickHandler;
+
+            // Adiciona o manipulador de clique do botão "Apagar" com a variável de evento global
+            buttonEditar.Click += EditarClickHandler;
+
             // Define a posição do item na Tag do botão "Apagar"
             buttonApagar.Tag = position;
-
+            buttonEditar.Tag = position;
             return view;
         }
         public static void RemoverTodosRemediosSqlite()
@@ -116,6 +137,8 @@ namespace CaixaInteligente
             string caminhoBanco = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "Remedio.db");
             var db = new SQLiteConnection(caminhoBanco);
             db.Execute("DELETE FROM Remedio");
+            db.Execute("DROP TABLE IF EXISTS Remedio");
+            db.CreateTable<Remedio>();
         }
     }
 }

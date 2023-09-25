@@ -45,10 +45,41 @@ namespace CaixaInteligente.Services
                         Frequencia = frequencia,
                         Recipiente = recipiente
                     });
-                
-            return result !=null;
-           
+
+            return result != null;
+
         }
+        public async Task<bool> UpdateRemedio(string remedioParaAtualizar, string idUsuario, string novoHorarioDeInicio, string novoNomeRemedio, int novaFrequencia, int novoRecipiente)
+        {
+            string nomeRemedioParaAtualizar = remedioParaAtualizar; // Substitua pelo nome do remédio que você deseja atualizar
+
+            var remediosQuery = await client.Child("Remedios")
+                                            .OnceAsync<Remedios>();
+
+            try
+            {
+                foreach (var remedioSnapshot in remediosQuery)
+                {
+                    var remedio = remedioSnapshot.Object;
+
+                    if (remedio.NomeRemedio == nomeRemedioParaAtualizar && remedio.IdUsuario == idUsuario)
+                    {
+                        remedio.NomeRemedio = novoNomeRemedio;
+                        remedio.Recipiente = novoRecipiente;
+                        remedio.Frequencia = novaFrequencia;
+                        remedio.HorarioInicio = novoHorarioDeInicio;
+
+                        await client.Child("Remedios").Child(remedioSnapshot.Key).PutAsync(remedio);
+                    }
+                }
+
+                return true;
+            }catch (Exception ex)
+            {
+                return false;
+            }
+        }
+       
         public async Task<List<Remedios>> ObterRemedios(string idUsuario)
         {
             try
@@ -69,7 +100,7 @@ namespace CaixaInteligente.Services
 
         }
         public async Task<bool> RemoverRemedio(string nomeRemedio, string idUsuario)
-        { 
+        {
             var remedios = (await client.Child("Remedios").OnceAsync<Remedios>())
                 .Where(u => u.Object.NomeRemedio == nomeRemedio)
                 .Where(u => u.Object.IdUsuario == idUsuario)
