@@ -3,17 +3,32 @@
 #include <PubSubClient.h>
 #include <ESP32Servo.h>  //Biblioteca utilizada
 
-int buz=0;
-const int buzzer = 23;
-bool AlarmeAtivado = false;
+int recipiente1 = 32;
+int recipiente2 = 33;
+int recipiente3 = 34;
+int recipiente4 = 35;
+
+int ledRecipiente1 = 18;
+int ledRecipiente2 = 19;
+int ledRecipiente3 = 21;
+int ledRecipiente4 = 22;
+
+int valorRecipiente1 = 0;
+int valorRecipiente2 = 0;
+int valorRecipiente3 = 0;
+int valorRecipiente4 = 0;
+
+bool recipiente1Ativo = false;
+bool recipiente2Ativo = false;
+bool recipiente3Ativo = false;
+bool recipiente4Ativo = false;
+
+const int buzzer = 18;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Definicoes para o MQTT */
-#define TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ADICIONAR_HORARIO "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ADICIONAR_HORARIO"
-#define TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_REMOVER_HORARIO "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_REMOVER_HORARIO"
-#define TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_STATUS_ALARME "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_STATUS_ALARME"
-#define TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ESP "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ESP"
-#define TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID "TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID"
+#define TOPICO_SUBSCRIBE_MED_BOX_SMART "TOPICO_SUBSCRIBE_MED_BOX_SMART"
+#define TOPICO_PUBLISH_MED_BOX_SMART "TOPICO_PUBLISH_MED_BOX_SMART"
 #define ID_MQTT  "dc44fae4-a83f-4303-9e8c-44957228882c"     //id mqtt (para identificação de sessão)
 //#define ID_MQTT  "mqttdash-ea4e25ea"
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,29 +106,52 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length)
   Serial.println(topic);
 
   /* toma ação dependendo da string recebida */
-   if(msg == "STATUS ALARME"){
-    //se alarme está ativado
-     if(AlarmeAtivado == true)
-     MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID, "Alarme Ativado");
-     //se alarme está desativado
-     else
-     MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID, "Alarme Desativado");
-  }
-  else if(msg == "A"){
-    //se alarme está ativado
-    if(AlarmeAtivado == true){
-    noTone(buzzer);
-    AlarmeAtivado = false;
-    MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID, "Alarme Desativado");
+   if(msg[0] == '1'){
+    if(msg[2] == '1'){
+      tone(buzzer,2000);//Aciona o Buzzer
+      digitalWrite(ledRecipiente1, HIGH);//liga o led do recipiente
+      recipiente1Ativo = true;
     }
-    //se alarme está desativado
-    else{
-    tone(buzzer,2000);
-    AlarmeAtivado = true;
-    MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID, "Alarme Ativado");
-    }    
+    else if(msg[2] == '2'){
+      tone(buzzer,2000);//Aciona o Buzzer
+      digitalWrite(ledRecipiente2, HIGH);//liga o led do recipiente
+      recipiente2Ativo = true;    
+    }
+    else if(msg[2] == '3'){
+      tone(buzzer,2000);//Aciona o Buzzer
+      digitalWrite(ledRecipiente3, HIGH);//liga o led do recipiente
+      recipiente3Ativo = true;
+    }
+    else if(msg[2] == '4'){
+      tone(buzzer,2000);//Aciona o Buzzer
+      digitalWrite(ledRecipiente4, HIGH);//liga o led do recipiente
+      recipiente4Ativo = true;
+    }
   }
-  
+  else{
+    if(msg[2] == '1'){
+      noTone(buzzer);//Desliga o Buzzer
+      digitalWrite(ledRecipiente1, LOW);//Desliga o led do recipiente
+      recipiente1Ativo = false;
+    }
+    else if(msg[2] == '2'){
+      noTone(buzzer);//Desliga o Buzzer
+      digitalWrite(ledRecipiente2, LOW);//Desliga o led do recipiente
+      recipiente2Ativo = false;
+    }
+    else if(msg[2] == '3'){
+      noTone(buzzer);//Desliga o Buzzer
+      digitalWrite(ledRecipiente3, LOW);//Desliga o led do recipiente
+      recipiente3Ativo = false;
+    }
+    else if(msg[2] == '4'){
+      noTone(buzzer);//Desliga o Buzzer
+      digitalWrite(ledRecipiente4, LOW);//Desliga o led do recipiente
+      recipiente4Ativo = false;
+    }
+  }
+
+  //   MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ANDROID, "Alarme Ativado");
   }
 /* Função: reconecta-se ao broker MQTT (caso ainda não esteja conectado ou em caso de a conexão cair)
            em caso de sucesso na conexão ou reconexão, o subscribe dos tópicos é refeito.
@@ -129,10 +167,7 @@ void reconnectMQTT(void)
     if (MQTT.connect(ID_MQTT))
     {
       Serial.println("Conectado com sucesso ao broker MQTT!");
-      MQTT.subscribe(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ADICIONAR_HORARIO);
-      MQTT.subscribe(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_REMOVER_HORARIO);
-      MQTT.subscribe(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_STATUS_ALARME);
-      MQTT.subscribe(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ESP);
+      MQTT.subscribe(TOPICO_SUBSCRIBE_MED_BOX_SMART);
     }
     else
     {
@@ -190,7 +225,17 @@ void setup() {
   Serial.println("Disciplina IoT2: acesso a nuvem via ESP32");
   delay(1000);
   randomSeed(analogRead(0));
-  pinMode(buzzer,OUTPUT);
+  pinMode(recipiente1, INPUT);
+  pinMode(recipiente2, INPUT);
+  pinMode(recipiente3, INPUT);
+  pinMode(recipiente4, INPUT);
+
+  pinMode(ledRecipiente1, OUTPUT);
+  pinMode(ledRecipiente2, OUTPUT);
+  pinMode(ledRecipiente3, OUTPUT);
+  pinMode(ledRecipiente4, OUTPUT);
+
+   pinMode(buzzer,OUTPUT);
   /* Inicializa a conexao wi-fi */
   initWiFi();
 
@@ -200,19 +245,55 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-
-  string horarioAtual = horarioAtual;
-  
- 
-  //se deu horário de tomar remédio aciona alarme e alarme está desativado
-  //if(AlarmeAtivado == false && horario[i]==horarioAtual)//acrescentar verificação do horário
-    //MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ESP, "A");
-  //se alarme está ativado e detectou que usuário pegou o remédio, desativa o alarme
-  //if(AlarmeAtivado == true )
-    //MQTT.publish(TOPICO_SUBSCRIBE_CAIXA_INTELIGENTE_ESP, "A");
-/* garante funcionamento das conexões WiFi e ao broker MQTT */
   VerificaConexoesWiFIEMQTT();
   /* keep-alive da comunicação com broker MQTT */
+  valorRecipiente1 = lerSensorLDR(recipiente1);
+  valorRecipiente2 = lerSensorLDR(recipiente2);
+  valorRecipiente3 = lerSensorLDR(recipiente3);
+  valorRecipiente4 = lerSensorLDR(recipiente4);
+  Serial.println(valorRecipiente4);
+  if(valorRecipiente1 > 900){
+    digitalWrite(ledRecipiente1, LOW);//Desliga o led do recipiente
+    if(recipiente1Ativo && !recipiente4Ativo && !recipiente3Ativo && !recipiente2Ativo){
+       noTone(buzzer);
+    }
+    if(recipiente1Ativo)
+    MQTT.publish(TOPICO_PUBLISH_MED_BOX_SMART, "0/1");
+    recipiente1Ativo = false;
+  }
+  if(valorRecipiente2 > 900){
+    digitalWrite(ledRecipiente2, LOW);//Desliga o led do recipiente
+    if(recipiente2Ativo && !recipiente4Ativo && !recipiente3Ativo && !recipiente1Ativo){
+       noTone(buzzer);
+    }
+    if(recipiente2Ativo)
+    MQTT.publish(TOPICO_PUBLISH_MED_BOX_SMART, "0/2");
+    recipiente2Ativo = false;
+
+  }
+  if(valorRecipiente3 > 900){
+    digitalWrite(ledRecipiente3, LOW);//Desliga o led do recipiente
+    if(recipiente3Ativo && !recipiente4Ativo && !recipiente2Ativo && !recipiente1Ativo){
+       noTone(buzzer);
+    }
+    if(recipiente3Ativo)
+    MQTT.publish(TOPICO_PUBLISH_MED_BOX_SMART, "0/3");
+    recipiente3Ativo = false;
+
+  }
+   if(valorRecipiente4 > 900){
+    digitalWrite(ledRecipiente4, LOW);//Desliga o led do recipiente
+    if(recipiente4Ativo && !recipiente3Ativo && !recipiente2Ativo && !recipiente1Ativo){
+      noTone(buzzer);
+    }
+    if(recipiente4Ativo)
+    MQTT.publish(TOPICO_PUBLISH_MED_BOX_SMART, "0/4");
+    recipiente4Ativo = false;
+
+
+  }
   MQTT.loop();
-  delay(100);
+}
+int lerSensorLDR(int recipiente){
+return analogRead(recipiente);
 }
